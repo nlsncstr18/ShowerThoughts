@@ -10,7 +10,9 @@ const Home = () => {
   //calling the api
   useEffect(() => {
     const fetchBlog = async () => {
-      const response = await fetch("/api/blogs");
+      const response = await fetch(
+        "https://shower-thoughts-rzxf.onrender.com/api/blogs"
+      );
       const json = await response.json();
 
       if (response.ok) {

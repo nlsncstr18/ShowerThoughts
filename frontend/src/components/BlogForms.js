@@ -14,13 +14,16 @@ const BlogForms = () => {
 
     const blog = { title };
 
-    const response = await fetch("/api/blogs", {
-      method: "POST",
-      body: JSON.stringify(blog),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      "https://shower-thoughts-rzxf.onrender.com/api/blogs",
+      {
+        method: "POST",
+        body: JSON.stringify(blog),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     const json = await response.json();
 
     if (response.ok) {
