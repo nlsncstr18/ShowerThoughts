@@ -11,13 +11,13 @@ const getBlog = async (req, res) => {
   const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(404).json({ error: "No such blog" });
+    return res.status(404).json({ error: "No such thought" });
   }
 
   const blog = await Blog.findById(id);
 
   if (!blog) {
-    return res.status(404).json({ error: "No such blog" });
+    return res.status(404).json({ error: "No such thoughts" });
   }
   res.status(200).json(blog);
 };
@@ -50,13 +50,13 @@ const createBlog = async (req, res) => {
 const deleteBlog = async (req, res) => {
   const { id } = req.params;
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(404).json({ error: "No such blog" });
+    return res.status(404).json({ error: "No such thought" });
   }
 
   const blog = await Blog.findOneAndDelete({ _id: id });
 
   if (!blog) {
-    return res.status(400).json({ error: "No such blog" });
+    return res.status(400).json({ error: "No such thought" });
   }
 
   res.status(200).json(blog);
