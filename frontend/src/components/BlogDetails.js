@@ -1,14 +1,42 @@
 import React from "react";
+import { useState, useContext } from "react";
 
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
+import { useThoughtsContext } from "../hooks/useBlogsContext";
 const BlogDetails = ({ blog }) => {
-  return (
-    <div className="shadow-2xl shadow-black m-10 w-72 h-28 p-8 rounded-md bg-white/10  backdrop-blur-xl">
-      <h1>{blog.title}</h1>
+  const { dispatch } = useThoughtsContext();
+  const handleDelete = async () => {
+    const response = await fetch(
+      process.env.REACT_APP_API_URL + "/api/blogs/" + blog._id,
+      {
+        method: "DELETE",
+      }
+    );
 
-      <p className="text-xs text-right ">
-        {formatDistanceToNow(new Date(blog.createdAt), { addSuffix: true })}
-      </p>
+    const json = await response.json();
+    if (response.ok) {
+      dispatch({ type: "DELETE_BLOG", payload: json });
+    }
+  };
+
+  return (
+    <div className="m-10 shadow-2xl shadow-black backdrop-blur-xl p-1 bg-white/10 rounded-md ">
+      <div className="w-72 max-h-32 p-8 overflow-y-auto font-semibold">
+        <h1>{blog.title}</h1>
+
+        <p className="text-xs text-right m-1">
+          {formatDistanceToNow(new Date(blog.createdAt), { addSuffix: true })}
+        </p>
+      </div>
+      <div className="flex justify-between">
+        <button className=" rounded-md font-semibold text-sm">Remind Me</button>
+        <button
+          onClick={handleDelete}
+          className="rounded-md font-medium text-sm"
+        >
+          Delete
+        </button>
+      </div>
     </div>
   );
 };

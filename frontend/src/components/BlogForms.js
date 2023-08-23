@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-
+import { useThoughtsContext } from "../hooks/useBlogsContext";
 const BlogForms = () => {
   const [title, setTitle] = useState("");
-
+  const { dispatch } = useThoughtsContext();
+  const [emptyFields, setEmptyFields] = useState([]);
   const [error, setError] = useState(null);
   const OnChangeTitle = (e) => {
     setTitle(e.target.value);
@@ -14,25 +15,25 @@ const BlogForms = () => {
 
     const blog = { title };
 
-    const response = await fetch(
-      "https://shower-thoughts-rzxf.onrender.com/api/blogs",
-      {
-        method: "POST",
-        body: JSON.stringify(blog),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await fetch(process.env.REACT_APP_API_URL + "/api/blogs", {
+      method: "POST",
+      body: JSON.stringify(blog),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
     const json = await response.json();
 
-    if (response.ok) {
+    if (!response.ok) {
       setError(json.error);
+      setEmptyFields("Input");
     }
     if (response.ok) {
+      setEmptyFields([]);
       setError(null);
       console.log("new blog added", json);
       setTitle("");
+      dispatch({ type: "CREATE_BLOG", payload: json });
     }
   };
 
@@ -45,7 +46,7 @@ const BlogForms = () => {
         <textarea
           onChange={OnChangeTitle}
           value={title}
-          placeholder="Your Shower Thought..."
+          placeholder={emptyFields + " Your Thoughts"}
           className="font-light bg-transparent text-white outline-none border-none p-10 w-full text-center relative resize-none"
         />
 
